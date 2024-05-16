@@ -21,6 +21,7 @@ In my project, I have implemented which packages.
 - [Swiperjs](https://swiperjs.com/)
 - [sweetalert2](https://sweetalert2.github.io/)
 - [Axios](https://axios-http.com/)
+- [react-responsive-carousel](https://www.npmjs.com/package/react-responsive-carousel)
 
 
 
