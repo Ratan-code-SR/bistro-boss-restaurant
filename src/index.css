@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.feature-image{
+    background-image: url('./assets/home/featured.jpg');
+    background-color: black;
+}
