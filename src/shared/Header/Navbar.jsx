@@ -1,12 +1,24 @@
-
+import { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../components/provider/ContextProvider";
+import { toast } from "react-toastify";
 const Navbar = () => {
+    const { user,logOut } = useContext(AuthContext)
     const navLink = <>
-        <li className="ml-3 font-semibold">Home</li>
+        <NavLink to="/"><li className="ml-3 font-semibold">Home</li></NavLink>
         <li className="ml-3 font-semibold">Contact Us</li>
         <li className="ml-3 font-semibold">Dashboard</li>
-        <li className="ml-3 font-semibold">Our Menu</li>
-        <li className="ml-3 font-semibold">Our Shop</li>
+        <NavLink to='/menu'><li className="ml-3 font-semibold">Our Menu</li></NavLink>
+        <NavLink to='/ourShop'><li className="ml-3 font-semibold">Our Shop</li></NavLink>
+      
     </>
+    const handleLogOut  = ()=> {
+        logOut()
+        .then(result => {
+            console.log(result);
+            toast.success('Logout successfully!!')
+        })
+    }
     return (
         <div className="navbar max-w-screen-xl  fixed z-10 opacity-70 text-white font-bold bg-black">
             <div className="navbar-start">
@@ -24,7 +36,13 @@ const Navbar = () => {
              lg:flex">
                 <ul className="menu menu-horizontal items-center px-1">
                     {navLink}
-                    <button className="btn font-semibold ml-3">Sign Out</button>
+                    {
+                        user ?
+                            <button onClick={handleLogOut} className="btn font-semibold ml-3">Sign Out</button> :
+                            
+                                <NavLink to='/login'><button className="ml-3 font-semibold btn">Login</button></NavLink>
+                    }
+
                 </ul>
             </div>
         </div>
