@@ -4,6 +4,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged,
 import auth from "../../firebase/firebase.config";
 import { signInWithPopup } from "firebase/auth";
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export const AuthContext = createContext()
 const ContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)

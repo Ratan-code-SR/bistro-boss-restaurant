@@ -13,7 +13,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 const Testimonial = () => {
     const [reviews, setReviews] = useState([])
     useEffect(() => {
-        fetch('reviews.json')
+        fetch('http://localhost:5000/reviews')
             .then(res => res.json())
             .then(data => setReviews(data))
     }, [])
@@ -42,8 +42,7 @@ const Testimonial = () => {
                 >
                     <div>
                         {
-                            reviews.map(review => <>
-                             
+                            reviews.map(review =>
                                     <SwiperSlide key={review._id}>
 
                                         <div className="text-center px-20">
@@ -52,15 +51,11 @@ const Testimonial = () => {
                                         </div>
 
                                     </SwiperSlide>
-                            </>)
+                            )
                         }
                     </div>
-
-
                 </Swiper>
             </div>
-
-
         </section>
     );
 };

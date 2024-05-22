@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import AuthContext from "../components/provider/ContextProvider"
+
 import { Navigate } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 
 const PrivateRoute = ({ children }) => {
-
-    const { user, loading } = useContext(AuthContext)
+    const { user, loading } = useAuth()
     if (loading) {
         return <>
             <div className="flex justify-center my-52">
@@ -16,7 +15,7 @@ const PrivateRoute = ({ children }) => {
     if (user) {
         return children;
     }
-    return <Navigate to="/login" state={location.pathname}></Navigate>
+    return <Navigate to="/login" state={{from:location}} replace></Navigate>
 
 };
 

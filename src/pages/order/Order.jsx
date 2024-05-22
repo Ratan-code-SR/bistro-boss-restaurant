@@ -3,7 +3,7 @@ import orderImg from '../../assets/shop/banner2.jpg'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import useMenu from "../../Hooks/useMenu";
-import FoodMenu from "./foodMenu/FoodMenu";
+import FoodCard from "./foodCard/FoodCard";
 const Order = () => {
     // const [tabIndex, setTabIndex] = useState(0);
     const [menu] = useMenu()
@@ -13,7 +13,7 @@ const Order = () => {
     const soups = menu.filter(items => items.category == 'soup')
     const drinks = menu.filter(items => items.category == 'drinks')
 
-    console.log(salads);
+    // console.log(salads);
 
     return (
         <div>
@@ -32,35 +32,35 @@ const Order = () => {
                     <TabPanel>
                         <div className="grid grid-cols-3 gap-5 ">
                             {salads.map((items,index) => 
-                                <FoodMenu key={index} item={items} />
+                                <FoodCard key={index} item={items} />
                             )}
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="grid grid-cols-3 gap-5 ">
                             {dessert.map((items,index) => 
-                                <FoodMenu key={index} item={items} />
+                                <FoodCard key={index} item={items} />
                             )}
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="grid grid-cols-3 gap-5 ">
                             {pizza.map((items,index) => 
-                                <FoodMenu key={index} item={items} />
+                                <FoodCard key={index} item={items} />
                             )}
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="grid grid-cols-3 gap-5 ">
                             {soups.map((items,index) => 
-                                <FoodMenu key={index} item={items} />
+                                <FoodCard key={index} item={items} />
                             )}
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="grid grid-cols-3 gap-5 ">
                             {drinks.map((items,index) => 
-                                <FoodMenu key={index} item={items} />
+                                <FoodCard key={index} item={items} />
                             )}
                         </div>
                     </TabPanel>

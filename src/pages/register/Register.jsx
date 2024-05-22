@@ -6,6 +6,7 @@ import { AuthContext } from "../../components/provider/ContextProvider";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 const Register = () => {
     const { signUpUser, updateUserProfile, setUser, user } = useContext(AuthContext)
     const {
@@ -13,6 +14,7 @@ const Register = () => {
         handleSubmit,
         formState: { errors },
     } = useForm()
+    const axiosPublic = useAxiosPublic()
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -26,9 +28,20 @@ const Register = () => {
             .then(result => {
                 console.log(result);
                 updateUserProfile(name, photo)
-                setUser({ ...user, photoURL: photo, displayName: name })
-                toast.success("user account create successfully!!")
-                navigate(location?.state ? location.state : "/")
+                    .then(() => {
+                        const userInfo = { name, email }
+                        axiosPublic.post("/users", userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    setUser({ ...user, photoURL: photo, displayName: name })
+                                    toast.success("user account create successfully!!")
+                                }
+                            })
+
+                        navigate(location?.state ? location.state : "/")
+                    })
+
+
             })
             .catch(error => {
                 console.log(error.message);

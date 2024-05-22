@@ -1,25 +1,27 @@
-import { useContext, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import loginImage from '../../assets/others/authentication2.png'
 import bgLoginImage from '../../assets/others/authentication.png'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '../../components/provider/ContextProvider';
-import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import useAuth from '../../Hooks/useAuth';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
 const Login = () => {
-    const { signInUser } = useContext(AuthContext)
+    const { signInUser, googleLogin } = useAuth()
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm()
     const location = useLocation()
     const navigate = useNavigate()
-    const captchaRef = useRef(null)
     const [disabled, setDisabled] = useState(true)
+    const axiosPublic = useAxiosPublic()
 
+    const from = location.state?.from?.pathname || "/"
     const onSubmit = (data) => {
         const email = data.email;
         const password = data.password;
@@ -27,20 +29,40 @@ const Login = () => {
             .then(result => {
                 console.log(result);
                 toast.success("user login successfully!!")
-                navigate(location?.state ? location.state : "/")
+                navigate(from, { replace: true })
+                reset()
             })
             .catch(error => {
                 console.log(error.message);
                 toast.error(error.message)
             })
-    
+
     }
-    const handleValidateCaptcha = () => {
-        let user_captcha_value = captchaRef.current.value;
+    const handleValidateCaptcha = (e) => {
+        let user_captcha_value = e.target.value;
         console.log(user_captcha_value);
         if (validateCaptcha(user_captcha_value)) {
             setDisabled(false)
+        } else {
+            setDisabled(true)
         }
+    }
+
+    const handleGoogleLogin = () => {
+        googleLogin()
+            .then(result => {
+                const userInfo = {
+                    name: result.users?.displayName,
+                    email: result.users?.email
+                }
+                axiosPublic.post("/users", userInfo)
+                .then(res => {
+                    console.log(res.data);
+                    toast.success("google login successfully!!!")
+                    navigate(from, { replace: true })
+                })
+
+            })
     }
 
     useEffect(() => {
@@ -75,15 +97,17 @@ const Login = () => {
                             <label className="label">
                                 <LoadCanvasTemplate />
                             </label>
-                            <input type="text" ref={captchaRef} placeholder="type here" className="input input-bordered" required />
-                            <button onClick={handleValidateCaptcha} className="btn-active btn-neutral mt-2 rounded-md">Submit</button>
+                            <input onBlur={handleValidateCaptcha} type="text" placeholder="type here" className="input input-bordered" />
                         </div>
 
                         <div className="form-control mt-2">
-                            <button disabled={disabled} type="submit" className="btn btn-primary">Login</button>
+                            <button disabled={false} type="submit" className="btn btn-primary">Login</button>
                         </div>
                     </form>
-                    <span className='text-center -mt-5'>You have no account? please   <Link to='/register' className='text-red-500'>Register</Link></span>
+                    <div className='mx-auto -mt-5'>
+                        <button onClick={handleGoogleLogin} className="btn btn-primary">Google</button>
+                    </div>
+                    <span className='text-center '>You have no account? please   <Link to='/register' className='text-red-500'>Register</Link></span>
                 </div>
             </div>
 
